@@ -1,0 +1,49 @@
+EXE_INC = \
+    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \
+    -I$(LIB_SRC)/TurbulenceModels/incompressible/lnInclude \
+    -I$(LIB_SRC)/transportModels \
+    -I$(LIB_SRC)/transportModels/incompressible/singlePhaseTransportModel \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(LIB_SRC)/fvOptions/lnInclude \
+    -I$(LIB_SRC)/fileFormats/lnInclude \
+    -I$(LIB_SRC)/dynamicFvMesh/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/radiation/lnInclude \
+    -I$(LIB_SRC)/turbulenceModels/compressible/turbulenceModel \
+    -I$(FOAM_SRC)/functionObjects/forces/lnInclude \
+    -I../../../src/online/problems/reductionProblem \
+    -I../../../src/online/problems/steadyNS \
+    -I../../../src/online/problems/unsteadyNS \
+    -I../../../src/online/reducedProblems/reducedProblem \
+    -I../../../src/online/reducedProblems/reducedUnsteadyNS \
+    -I../../../src/online/reducedProblems/reducedSteadyNS \
+    -I../../../src/online/ITHACAutilities \
+    -I../../../src/online/ForceCoeff \
+    -I../../../src/online/ITHACAstream \
+    -I../../../src/online/ITHACAPOD \
+    -I../../../src/online/NonLinearSolvers \
+    -I../../../src/thirdparty/Eigen \
+    -I../../../src/online/Foam2Eigen \
+    -I../../../src/online/EigenFunctions \
+    -I../../../src/thirdparty/spectra-0.6.1/include \
+    -w \
+    -DOFVER=$${WM_PROJECT_VERSION%.*} \
+    -std=c++11
+
+    
+EXE_LIBS = \
+    -lsampling \
+    -L$(PETSC_DIR)/lib -lpetsc \
+    -L$(SLEPC_DIR)/lib -lslepc \
+    -lturbulenceModels \
+    -lincompressibleTransportModels \
+    -lincompressibleTurbulenceModels \
+    -lfiniteVolume \
+    -lmeshTools \
+    -lfvOptions \
+    -lsampling \
+    -lforces \
+    -lITHACA-DG-Reduced \
+    -L$(FOAM_USER_LIBBIN) \

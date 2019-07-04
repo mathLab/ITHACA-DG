@@ -1,0 +1,37 @@
+EXE_INC = \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(LIB_SRC)/fileFormats/lnInclude \
+    -I$(FOAM_SRC)/functionObjects/forces/lnInclude \
+    -I$(LIB_SRC)/fileFormats/lnInclude \
+    -I../../../src/offline/problems/reductionProblem \
+    -I../../../src/offline/ElemReduction \
+    -I../../../src/online/Foam2Eigen \
+    -I../../../src/offline/problems/unsteadyNS_DG \
+    -I../../../src/offline/ITHACAutilities \
+    -I../../../src/offline/ITHACAstream \
+    -I../../../src/thirdparty/Eigen \
+    -I../../../src/online/EigenFunctions \
+    -I../../../src/thirdparty/spectra-0.6.1/include \
+    -I$(MPI_DIR)/include \
+    -I$(MPI_DIR)/lib \
+    -I$(LIB_SRC)/DG/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(PETSC_DIR)/include \
+	-I$(PETSC_DIR)/lib \
+    -I$(SLEPC_DIR)/include \
+    -w \
+    -DOFVER=$${WM_PROJECT_VERSION%.*} \
+    -std=c++11
+
+EXE_LIBS = \
+    -lDG \
+    -lsampling \
+    -L$(PETSC_DIR)/lib -lpetsc \
+    -L$(SLEPC_DIR)/lib -lslepc \
+    -lmeshTools \
+    -lsampling \
+    -lforces \
+    -lITHACA-DG-Problems \
+    -lITHACA-DG-Reduced \
+    -L$(FOAM_USER_LIBBIN) 
