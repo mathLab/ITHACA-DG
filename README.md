@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://mathlab.github.io/ITHACA-DG/" target="_blank" >
-    <img alt="ITHACA-DG" src="./docs/logo/ithaca-dg_small.png" width="200" />
+    <img alt="ITHACA-DG" src="./docs/logo/ithaca-dg.png" width="200" />
   </a>
 </p>
 
