@@ -2,7 +2,7 @@
 
 In order to start developing the code and to start adding your contributions to
 the repository please follow these steps. In particular:
-* if it is the first time you start adding contributions to the ITHACA-FV library
+* if it is the first time you start adding contributions to the ITHACA-DG library
 follow these steps from point number [1](#1);
 * if you have already contributed to the project you can start directly from point number [4](#4).
 
@@ -10,52 +10,52 @@ However, before creating the development branch that contains the new feature
 you want to add, remember to pull the last changes (see [here](https://help.github.com/articles/syncing-a-fork/) for more information).
 
 1. <div id="1">Create a new fork of the public repository
-   [ITHACA-FV](https://github.com/mathlab/ITHACA-FV)
+   [ITHACA-DG](https://github.com/mathlab/ITHACA-DG)
    ([here](https://help.github.com/articles/fork-a-repo) you can find an
-    introduction about the fork procedure). 
+   introduction about the fork procedure). 
 
 2. Let's assume your Github username is YOUR-USERNAME, you can access to your
    own fork at the URL
-   [github.com/YOUR-USERNAME/ITHACA-FV](https://github.com/YOUR-USERNAME/ITHACA-FV)
+   [github.com/YOUR-USERNAME/ITHACA-DG](https://github.com/YOUR-USERNAME/ITHACA-DG)
    and clone it using the favourite protocol (HTTPS is the easiest) using the
    command `git clone <url>`. In this example by digiting on the terminal:
-```
-git clone "https://github.com/YOUR-USERNAME/ITHACA-FV"
-```
-a new folder called ITHACA-FV is created.
+   ```
+   git clone "https://github.com/YOUR-USERNAME/ITHACA-DG"
+   ```
+   a new folder called ITHACA-DG is created.
 
-3. Go the cloned folder and add the remote URL of the original ITHACA-FV
+3. Go the cloned folder and add the remote URL of the original ITHACA-DG
    repository (**not** the fork) using the following commands:
-```
-cd ITHACA-FV
-git remote add mathlab "https://github.com/mathlab/ITHACA-FV"
-```
+   ```
+   cd ITHACA-DG
+   git remote add mathlab "https://github.com/mathlab/ITHACA-DG"
+   ```
 
 4. <div id="4">Create a branch into your local repository. The new branch name
    should describe the new feature you have planned to insert in the
    repository. The command is:
-```
-git checkout -b new_branch_name
-```
+   ```
+   git checkout -b new_branch_name
+   ```
 
 5. Start implementing changes or adding new functionalities. Please ensure to
    write well-documented and properly formatted code. You can use the
-   [`code_formatter.sh`](https://github.com/mathLab/ITHACA-FV/blob/master/code_formatter.sh)
+   [`code_formatter.sh`](https://github.com/mathLab/ITHACA-DG/blob/master/code_formatter.sh)
    script (already in the repository) to automatically format the code
    according to the ITHACA style.
 
 6. Add changed files or new files for the next commit by digiting:
-```
-git add NEWFILE1.H
-git add NEWFILE2.C
-```
+   ```
+   git add NEWFILE1.H
+   git add NEWFILE2.C
+   ```
 
 7. Create the new commit. The commit message has to synthetically describe the
    new changes (see [here](https://chris.beams.io/posts/git-commit/) for an
    exhaustive discussion about commit messages).
-```
-git commit -m "meaningfull commit message"
-```
+   ```
+   git commit -m "meaningfull commit message"
+   ```
 
 8. Before pushing your local changes in the Github fork, don't forget to sync
    your fork with the original repository. With this further step, you can
@@ -71,15 +71,15 @@ git commit -m "meaningfull commit message"
    [this](https://help.github.com/articles/syncing-a-fork/).
 
 9. Push the `new_branch_name` branch commit to your remote fork:
-```
-git push origin new_branch_name
-```
+   ```
+   git push origin new_branch_name
+   ```
 
 10. Open a new pull request (in [this guide](https://help.github.com/articles/creating-a-pull-request/)
     the basic steps to open a pull request are introduced). Please use a
     meaningful name and a synthetic description of the new implemented feature.
     Once you have performed the pull request you will have to wait the response
-    of the ITHACA-FV administrators. 
+    of the ITHACA-DG administrators. 
 
 11. In case there is something to change you will have to implement corrections
     asked by the administrators and perform a new push. In case there are no
@@ -95,14 +95,14 @@ git push origin new_branch_name
     and not your fork, contains within the `master` branch the feature you
     implemented).
     As before digit (*NOTE*: the following commands delete the `new_branch_name`):
-```
-git checkout master
-git fetch mathlab
-git pull mathlab/master master
-git branch -D new_branch_name
-git push origin --delete new_branch_name
-git push origin master
-```
+    ```
+    git checkout master
+    git fetch mathlab
+    git pull mathlab/master master
+    git branch -D new_branch_name
+    git push origin --delete new_branch_name
+    git push origin master
+    ```
 
 **HAVE FUN CODING!!!**
 
