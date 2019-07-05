@@ -1,0 +1,11 @@
+../OpenFOAM/db/functionObjects/logFiles/writeFile.C 
+../OpenFOAM/db/functionObjects/logFiles/logFiles.C
+problems/reductionProblem/reductionProblem.C
+$(FOAM_SRC)/OpenFOAM/db/Time/findTimes.C
+ITHACAstream/ITHACAstreamDG.C
+problems/unsteadyEuler/unsteadyEuler.C
+problems/unsteadyNS_DG/unsteadyNS_DG.C
+ITHACAutilities/ITHACAutilitiesDG.C
+ElemReduction/elemReduction.C
+
+LIB = $(FOAM_USER_LIBBIN)/libITHACA-DG-Problems

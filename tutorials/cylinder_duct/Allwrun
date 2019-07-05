@@ -1,0 +1,19 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+cd offline
+wmake
+cd ..
+
+./NS_offline
+
+sed -i 's/dgScalarField/volScalarField/g' 0/p
+sed -i 's/dgVectorField/volVectorField/g' 0/U
+
+cd online
+wmake
+cd ..
+
+./NS_online
+
+#------------------------------------------------------------------------------

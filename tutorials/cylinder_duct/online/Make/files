@@ -1,0 +1,4 @@
+NS_online.C
+
+EXE = ../NS_online
+
