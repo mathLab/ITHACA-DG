@@ -1,0 +1,120 @@
+##TODO: check version of gpp, installation of cmake 2.8.11 or higher required, gfortran. Rename every download
+
+echo "Downloading dependencies"
+### download HopeFOAM
+wget https://github.com/HopeFOAM/HopeFOAM/archive/master.zip -O master.zip && unzip master.zip && rm master.zip && mv HopeFOAM-master HopeFOAM
+
+### download openmpi-1.6.4
+wget https://download.open-mpi.org/release/open-mpi/v1.6/openmpi-1.6.4.tar.gz && tar xvzf openmpi-1.6.4.tar.gz && rm openmpi-1.6.4.tar.gz
+
+### download CGAL-4.8
+wget https://github.com/CGAL/cgal/archive/releases/CGAL-4.8.tar.gz && tar xvzf CGAL-4.8.tar.gz && rm CGAL-4.8.tar.gz
+mv cgal-releases-CGAL-4.8 ./HopeFOAM/ThirdParty-0.1/CGAL-4.8
+
+### download boost-1.55.0
+wget https://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz && tar xvzf boost_1_55_0.tar.gz && rm boost_1_55_0.tar.gz
+mv boost_1_55_0 ./HopeFOAM/ThirdParty-0.1/boost-1.55.0
+
+### download lapack-3.5.0
+wget www.netlib.org/lapack/lapack-3.5.0.tgz && tar xvzf lapack-3.5.0.tgz && rm lapack-3.5.0.tgz
+
+### download petsc-3.7.6
+wget ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.7.6.tar.gz && tar xvzf petsc-3.7.6.tar.gz && rm petsc-3.7.6.tar.gz
+
+### download slepc-3.7.4
+wget slepc.upv.es/download/distrib/slepc-3.7.4.tar.gz && tar xvzf slepc-3.7.4.tar.gz && rm slepc-3.7.4.tar.gz
+
+### install openmpi-1.6.4
+cd openmpi-1.6.4
+./configure --prefix=$PWD/openmpi
+make all install
+export PATH="$PATH:$PWD/openmpi/bin"
+export PATH="$PATH:$PWD/openmpi/include"
+echo "export LD_LIBRARY_PATH=$PWD/openmpi/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
+cd ..
+
+### install lapack
+cd lapack-3.5.0
+cp make.inc.example make.inc
+sed -i "68s@.*@BLASLIB = ../../libblas.a@" make.inc
+sed -i "11s@.*@#lib: lapacklib tmglib@" Makefile
+sed -i "12s@.*@lib: blaslib variants lapacklib tmglib@" Makefile
+cmake -DBUILD_SHARED_LIBS=ON 
+make
+cd ..
+
+### install petsc
+cd petsc-3.7.6/
+mkdir PETSC
+export PETSC_DIR=$PWD
+./configure --prefix=$PWD/PETSC --download-hypre --with-debugging=0 COPTFLAGS=-O3 CXXOPTFLAGS=-O3 --with-blas-lapack-dir=../lapack-3.5.0/lib --with-mpi-dir=../openmpi-1.6.4/openmpi --sharedLibraryFlags="-fPIC -shared"
+make PETSC_DIR=$PWD PETSC_ARCH=arch-linux2-c-opt all
+make PETSC_DIR=$PWD PETSC_ARCH=arch-linux2-c-opt install
+make PETSC_DIR=$PWD/PETSC PETSC_ARCH="" test
+cd ..
+
+### install slepc
+### TODO: understand why second configure does not work immediately
+### sometimes is asked permission to configure in $PWD/SLEPC, when doing make install
+export PETSC_DIR=$PWD/petsc-3.7.6/PETSC
+unset PETSC_ARCH
+cd slepc-3.7.4
+mkdir SLEPC
+export SLEPC_DIR=$PWD
+./configure --prefix=$PWD/SLEPC
+make install
+export SLEPC_DIR=$PWD/SLEPC
+cd ..
+
+###INSTALL HOPEFOAM
+
+### install ThirdParties
+###TODO:sometimes this sed commands need to be launched twice
+sed -i "40s@.*@#cgal_version=CGAL-0.1@" HopeFOAM/HopeFOAM-0.1/etc/config.sh/CGAL
+sed -i "41s@.*@cgal_version=CGAL-4.8@" HopeFOAM/HopeFOAM-0.1/etc/config.sh/CGAL
+sed -i "34s@.*@export WM_PROJECT=HopeFOAM@" HopeFOAM/HopeFOAM-0.1/etc/bashrc
+sed -i "48s@.*@export FOAM_INST_DIR=$PWD/$WM_PROJECT@" HopeFOAM/HopeFOAM-0.1/etc/bashrc
+sed -i "55s@.*@    export MPI_ARCH_PATH=$PWD/openmpi-1.6.4/openmpi@" HopeFOAM/HopeFOAM-0.1/etc/config.sh/mpi
+sed -i "93s@.*@export WM_MPLIB=OPENMPI@" HopeFOAM/HopeFOAM-0.1/etc/bashrc
+sed -i "67s@.*@    if [ -r $PWD/openmpi-1.6.4/openmpi/lib/libmpi.so ]@" HopeFOAM/ThirdParty-0.1/Allwmake
+
+cd HopeFOAM
+sed -i -e 's/\(boost_version=\)boost-system/\1boost-1.55.0/' HopeFOAM-0.1/etc/config.sh/CGAL
+sed -i -e 's/\(cgal_version=\)cgal-system/\1CGAL-0.1/' HopeFOAM-0.1/etc/config.sh/CGAL
+sed -i -e 's=\-lmpfr=-lmpfr -lboost_thread=' HopeFOAM-0.1/wmake/rules/General/CGAL
+cd ..
+
+source HopeFOAM/HopeFOAM-0.1/etc/bashrc
+cd HopeFOAM/ThirdParty-0.1
+./Allwmake
+cd ..
+
+source HopeFOAM-0.1/etc/bashrc
+cd HopeFOAM-0.1
+./AllwmakeOpenFOAM
+cd ..
+cd ..
+
+echo "export PETSC_DIR=$PWD/petsc-3.7.6/PETSC" >> ~/.bashrc
+echo "export SLEPC_DIR=$PWD/slepc-3.7.4/SLEPC" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=$PWD/petsc-3.7.6/PETSC/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=$PWD/slepc-3.7.4/SLEPC/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
+source $HOME/.bashrc
+
+cd HopeFOAM/HopeFOAM-0.1
+source ./etc/bashrc
+./AllwmakeDG
+cd ..
+
+##Additional installations on Ulysse
+#install autoconf version 2.6.9
+#install lxml2
+#install MPFR https://www.mpfr.org/mpfr-current/mpfr-4.0.2.tar.gz
+#install GMP https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
+
+export LD_LIRBARY_PATH=/scratch/fromor/mpfr-4.0.2/MPFR/lib:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=/scratch/fromor/mpfr-4.0.2/MPFR/include:$C_INCLUDE_PATH
+export LD_LIBRARY_PATH=/scratch/fromor/gmp-6.1.2/GMP/lib:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=/scratch/fromor/gmp-6.1.2/GMP/include:$C_INCLUDE_PATH
+
+
